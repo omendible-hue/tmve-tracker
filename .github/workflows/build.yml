@@ -8,46 +8,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    env:
-      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
  
     steps:
       - uses: actions/checkout@v4
  
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
- 
-      - name: Install Java 17
+      - name: Build APK with Docker
         run: |
-          sudo apt-get update
-          sudo apt-get install -y openjdk-17-jdk
-          sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
- 
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y \
-            git zip unzip autoconf libtool pkg-config \
-            zlib1g-dev libncurses5-dev libncursesw5-dev \
-            cmake libffi-dev libssl-dev
-          pip install buildozer cython==0.29.33
- 
-      - name: Cache buildozer
-        uses: actions/cache@v4
-        with:
-          path: ~/.buildozer
-          key: buildozer-${{ hashFiles('buildozer.spec') }}
-          restore-keys: buildozer-
- 
-      - name: Build APK
-        run: |
-          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
-          export PATH=$JAVA_HOME/bin:$PATH
-          buildozer android debug
+          docker run --rm \
+            -v ${{ github.workspace }}:/home/user/hostcwd \
+            kivy/buildozer:latest \
+            android debug
  
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: TMVETracker-APK
           path: bin/*.apk
+tiene menú contextual
