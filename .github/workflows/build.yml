@@ -51,4 +51,3 @@ jobs:
         with:
           name: TMVETracker-APK
           path: bin/*.apk
- 
