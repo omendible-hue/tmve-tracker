@@ -27,7 +27,7 @@ jobs:
           pip install buildozer cython==0.29.33
  
       - name: Set up Android SDK/NDK cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.buildozer
@@ -39,7 +39,7 @@ jobs:
           buildozer -v android debug
  
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TMVETracker-APK
           path: bin/*.apk
